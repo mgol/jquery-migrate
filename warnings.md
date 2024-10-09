@@ -33,13 +33,6 @@ This is _not_ a warning, but a console log message the plugin shows when it firs
 
 **Solution**: Don't call `jQuery` with just `"#"`. If you construct your ID selector dynamically, make sure the string appended to `"#"` is not empty.
 
-### \[selector-hash\] JQMIGRATE: Attribute selector with '#' must be quoted
-### \[selector-hash\] JQMIGRATE: Attribute selector with '#' was not fixed
-
-**Cause:** Selectors such as `a[href=#main]` are not valid CSS syntax because the value contains special characters that are not quoted. Until jQuery 1.11.3/2.1.4 this was accepted, but the behavior is non-standard and was never documented. In later versions this selector throws an error. *In some cases with complex selectors, Migrate may not attempt a repair.* In those cases a fatal error will be logged on the console and you will need to fix the selector manually.
-
-**Solution**: Put quotes around any attribute values that have special characters, e.g. `a[href="#main"]`. The warning message contains the selector that caused the problem, use that to find the selector in the source files.
-
 ### \[quirks\] JQMIGRATE: jQuery is not compatible with Quirks Mode
 
 **Cause:** A browser runs in "quirks mode" when the HTML document does not have a `<!doctype ...>` as its first non-blank line, or when the doctype in the file is invalid. This mode causes the browser to emulate 1990s-era (HTML3) behavior. In Internet Explorer, it also causes many high-performance APIs to be hidden in order to better emulate ancient browsers. jQuery has never been compatible with, or tested in, quirks mode.
@@ -114,12 +107,6 @@ This is _not_ a warning, but a console log message the plugin shows when it firs
 **Cause:** As of jQuery 3.0, the serialization method `jQuery.param` is fully independent of jQuery's ajax module. As a result, it does not look at the `jQuery.ajaxSettings.traditional` flag that affects how form data is encoded. Note that the `jQuery.ajax()` method still honors this flag if you make a request through it.
 
 **Solution:** To continue using the `traditional` flag, pass it explicitly: `jQuery.param( myData, jQuery.ajaxSettings.traditional )`.
-
-### \[swap\] JQMIGRATE: jQuery.swap() is undocumented and deprecated
-
-**Cause**: The `jQuery.swap()` method temporarily exchanges a set of CSS properties. It was never documented as part of jQuery's public API and should not be used because it can cause performance problems due to forced layout. This method has been removed in jQuery 3.0.
-
-**Solution**: Rework the code to avoid calling `jQuery.swap()`, or explicitly set and restore the properties you need to change.
 
 ### \[pre-on-methods\] JQMIGRATE: jQuery.fn.bind() is deprecated
 ### \[pre-on-methods\] JQMIGRATE: jQuery.fn.unbind() is deprecated
@@ -278,12 +265,6 @@ See jQuery-ui [commit](https://github.com/jquery/jquery-ui/commit/c0093b599fcd58
 **Cause:** In past versions, when a number-typed value was passed to `.css()` jQuery converted it to a string and added `"px"` to the end. As the CSS standard has evolved, an increasingly large set of CSS properties now accept values that are unitless numbers, where this behavior is incorrect. It has become impractical to manage these exceptions in the `jQuery.cssNumber` object. In addition, some CSS properties like `line-height` can accept both a bare number `2` or a pixel value `2px`. jQuery cannot know the correct way to interpret `$.css("line-height", 2)` and currently treats it as `"2px"`.
 
 **Solution:** Always pass string values to `.css()`, and explicitly add units where required. For example, use `$.css("line-height", "2")` to specify 200% of the current line height or `$.css("line-height", "2px")` to specify pixels. When the numeric value is in a variable, ensure the value is converted to string, e.g. `$.css("line-height", String(height))` and `$.css("line-height", height+"px")`.
-
-### \[legacy-self-closed-tags\] JQMIGRATE: jQuery.UNSAFE_restoreLegacyHtmlPrefilter is deprecated
-
-**Cause:** jQuery Migrate 3.4.0 introduced a `jQuery.migrateEnablePatches` method used to enable any previously disabled patches. It should be used in place of the specialized `jQuery.UNSAFE_restoreLegacyHtmlPrefilter`. This warning is different as it applies to jQuery Migrate and not to jQuery itself.
-
-**Solution:** Search for the `jQuery.UNSAFE_restoreLegacyHtmlPrefilter()` calls in the code base and replace all occurrences with `jQuery.migrateEnablePatches( "self-closed-tags" )`.
 
 ### \[self-closed-tags\] JQMIGRATE: HTML tags must be properly nested and closed: _(HTML string)_
 

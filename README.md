@@ -75,8 +75,6 @@ This plugin adds some properties to the `jQuery` object that can be used to prog
 
 `jQuery.migrateIsPatchEnabled`: Returns `true` if a patch of a provided code is enabled and `false` otherwise.
 
-`jQuery.UNSAFE_restoreLegacyHtmlPrefilter`: A deprecated alias of `jQuery.migrateEnablePatches( "self-closed-tags" )`
-
 ## Reporting problems
 
 Bugs that only occur when the jQuery Migrate plugin is used should be reported in the [jQuery Migrate Issue Tracker](https://github.com/jquery/jquery-migrate/issues) and should be accompanied by an executable test case that demonstrates the bug. The easiest way to do this is via an online test tool such as [jsFiddle.net](https://jsFiddle.net/) or [jsbin.com](https://jsbin.com). Use the development version when you are reporting bugs.
