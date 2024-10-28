@@ -1,7 +1,8 @@
 import { migratePatchFunc, migrateWarn } from "../main.js";
 import { camelCase } from "../utils.js";
 
-var origData = jQuery.data;
+var origData = jQuery.data,
+	origPrivData = jQuery._data;
 
 migratePatchFunc( jQuery, "data", function( elem, name, value ) {
 	var curData, sameKeys, key;
@@ -42,3 +43,44 @@ migratePatchFunc( jQuery, "data", function( elem, name, value ) {
 
 	return origData.apply( this, arguments );
 }, "data-camelCase" );
+
+function patchDataProto( original ) {
+	return function() {
+		var result = original.apply( this, arguments );
+
+		if ( arguments.length !== 1 ) {
+			return result;
+		}
+
+		result.__proto__ = Object.prototype;
+
+		if ( typeof Proxy !== "undefined" ) {
+			result = new Proxy( result, {
+				get: function( _target, property ) {
+					if ( property in Object.prototype ) {
+						migrateWarn( "data-null-proto",
+							"Accessing properties inherited from Object.prototype is deprecated" );
+					}
+					return Reflect.get.apply( this, arguments );
+				},
+				set: function( _target, property ) {
+					if ( property in Object.prototype ) {
+						migrateWarn( "data-null-proto",
+							"Setting properties inherited from Object.prototype is deprecated" );
+					}
+					return Reflect.set.apply( this, arguments );
+				}
+			} );
+		}
+
+		return result;
+	};
+}
+
+// Yes, we are patching jQuery.data twice; here & above. This is necessary
+// so that each of the two patches can be independently disabled.
+migratePatchFunc( jQuery, "data", patchDataProto( origData ), "data-null-proto" );
+migratePatchFunc( jQuery, "_data", patchDataProto( origPrivData ), "data-null-proto" );
+
+// TODO jQuery.fn.data patches - both!
+// TODO tests for all changes
