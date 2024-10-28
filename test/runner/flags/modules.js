@@ -5,6 +5,7 @@ export const modules = [
 	"attributes",
 	"css",
 	"data",
+	"data-jquery-compat",
 	"deferred",
 	"effects",
 	"event",
