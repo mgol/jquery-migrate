@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 3.x-stable
+      - 3.x-data-tests
   # Once a week every Tuesday
   schedule:
     - cron: "12 2 * * 2"
