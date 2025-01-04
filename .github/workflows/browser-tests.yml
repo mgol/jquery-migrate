@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - 3.x-stable
+      - 3.x-data-tests
 
 env:
   NODE_VERSION: 22.x
