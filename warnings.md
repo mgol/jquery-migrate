@@ -161,15 +161,21 @@ This is _not_ a warning, but a console log message the plugin shows when it firs
 
 ### \[jsonp-promotion\] JQMIGRATE: JSON-to-JSONP auto-promotion is removed
 
-**Cause:** `jQuery.ajax` calls with `dataType: 'json'` with a provided callback are automatically converted by jQuery to JSONP requests unless the options also specify `jsonp: false`. Auto-promoting JSON requests to JSONP introduces a security risk as the developer may be unaware they're not just downloading data but executing code from a remote domain. This auto-promoting behavior is deprecated and will be removed in jQuery 4.0.0.
+**Cause:** `jQuery.ajax` calls with `dataType: 'json'` with a provided callback are automatically converted by jQuery to JSONP requests unless the options also specify `jsonp: false`. Auto-promoting JSON requests to JSONP introduces a security risk as the developer may be unaware they're not just downloading data but executing code from a remote domain. This auto-promoting behavior is removed in jQuery 4.0.0.
 
 **Solution:** To trigger a JSONP request, specify the `dataType: "jsonp"` option.
 
 ### \[deferred-getStackHook\] JQMIGRATE: jQuery.Deferred.getStackHook is removed; use jQuery.Deferred.getErrorHook
 
-**Cause:** `jQuery.Deferred.getStackHook` was originally created to pass the stack trace from before an async barrier to report when a user error (like calling a non-existing function) causes a promise to be rejected. However, passing a stack trace doesn't take source maps into account, so we started advising to pass the whole error object. To make it clearer, we also renamed the API to `jQuery.Deferred.getErrorHook`. The legacy alias will be removed in jQuery 4.0.0
+**Cause:** `jQuery.Deferred.getStackHook` was originally created to pass the stack trace from before an async barrier to report when a user error (like calling a non-existing function) causes a promise to be rejected. However, passing a stack trace doesn't take source maps into account, so we started advising to pass the whole error object. To make it clearer, we also renamed the API to `jQuery.Deferred.getErrorHook`. The legacy alias is removed in jQuery 4.0.0.
 
 **Solution:** Rename all usage of `jQuery.Deferred.getStackHook` to `jQuery.Deferred.getErrorHook`. If you previously assigned a function returning an error stack to `jQuery.Deferred.getStackHook` or `jQuery.Deferred.getErrorHook`, change it to return a full error object.
+
+### \[event-global\] JQMIGRATE: jQuery.Deferred.getStackHook is removed; use jQuery.Deferred.getErrorHook
+
+**Cause:** `jQuery.event.global` was an object with keys being event names for which event listeners have ever been added. Originally, it was needed for performance reasons and to fix memory leaks in old IE, but since jQuery 1.9.0, the library has only been recording the events, but it was not using that information anywhere. jQuery 4.0.0 removes the API.
+
+**Solution:** Remove all usage of `jQuery.event.global`; it's unlikely any existing usage is needed.
 
 
 ## Deprecated APIs
